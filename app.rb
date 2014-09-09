@@ -10,10 +10,6 @@ get '/' do
   haml :index
 end
 
-get '/data' do
-  # haml :data
-end
-
 get '/tail/:b64filepath', provides: 'text/event-stream' do
   stream :keep_open do |out|
     filepath = Base64.decode64(params[:b64filepath])
