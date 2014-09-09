@@ -1,52 +1,29 @@
-require "sinatra"
-require "sinatra/streaming"
-require "open3"
-require "haml"
-require "base64"
-# require "eventmachine-tail"
+class App < Sinatra::Base
+  set server: 'thin', connections: []
 
-set server: 'thin', connections: []
+  configure do
+    set :threaded, false
+  end
 
-get '/' do
-  settings.connections.map &:close
-  haml :index
-end
+  get '/' do
+    haml :index
+  end
 
-get '/tail/:b64filepath', provides: 'text/event-stream' do
-  stream :keep_open do |out|
-    filepath = File.expand_path Base64.decode64(params[:b64filepath])
+  get '/tail/:b64filepath', provides: 'text/event-stream' do
+    stream :keep_open do |out|
+      filepath = File.expand_path Base64.decode64(params[:b64filepath])
 
-    settings.connections << out
-    puts "New connection. #{settings.connections.count} connections open"
+      settings.connections << out
+      puts "New connection. #{settings.connections.count} connections open"
 
-    out.callback do
-      settings.connections.delete(out)
-      puts "Connection closed. #{settings.connections.count} are open yet."
-    end
-
-    if File.exists?(filepath)
-      cmd = 'tail -f "'+filepath+'"'
-      Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
-        loop do
-          if stdout.eof?
-            puts "stdout EOF"
-            break
-          end
-
-          line = stdout.gets
-
-          if out.closed?
-            puts "This connection was closed"
-            break
-          end
-
-          out.write "data: #{line.strip}\n\n"
-          out.flush
-        end
+      out.callback do
+        settings.connections.delete(out)
+        puts "Connection closed. #{settings.connections.count} are open yet."
       end
-    else
-      out.write "data: File not found\n\n"
-      out.flush
+
+      EventMachine::file_tail(filepath, nil, -1) do |filetail, line|
+        out << "data: #{line.strip}\n\n"
+      end
     end
   end
 end
