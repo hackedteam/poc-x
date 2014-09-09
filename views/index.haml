@@ -1,0 +1,30 @@
+%ul.nav.nav-tabs{role: "tablist"}
+  %li{class: 'active'}
+    %a{href: '#data', role: 'tab', data: {toggle: 'tab'}}
+      Data flow
+  %li
+    %a{href: '#config', role: 'tab', data: {toggle: 'tab'}}
+      Configure
+  %li
+    %a{href: '#logs', role: 'tab', data: {toggle: 'tab'}}
+      Logs
+
+.tab-content
+  #data.tab-pane.fade-in.active
+    %table{width: '100%'}
+      %tr
+        %td{width: '50%'}
+          .stream{data: {path: '/Users/danielemolteni/ht/rcs-db/log/rcs-db_2014-09-09.log'}}
+        %td{width: '50%'}
+          .stream{data: {path: '/Users/danielemolteni/ht/rcs-db/log/rcs-db_2014-09-09.log'}}
+      %tr
+        %td{width: '50%'}
+          .stream{data: {path: '/Users/danielemolteni/ht/rcs-db/log/rcs-db_2014-09-09.log'}}
+        %td{width: '50%'}
+          .stream{data: {path: '/Users/danielemolteni/ht/rcs-db/log/rcs-db_2014-09-09.log'}}
+
+  #config.tab-pane
+    config...
+
+  #logs.tab-pane
+    logs...
