@@ -3,16 +3,18 @@ require "sinatra/streaming"
 require "open3"
 require "haml"
 require "base64"
+# require "eventmachine-tail"
 
 set server: 'thin', connections: []
 
 get '/' do
+  settings.connections.map &:close
   haml :index
 end
 
 get '/tail/:b64filepath', provides: 'text/event-stream' do
   stream :keep_open do |out|
-    filepath = Base64.decode64(params[:b64filepath])
+    filepath = File.expand_path Base64.decode64(params[:b64filepath])
 
     settings.connections << out
     puts "New connection. #{settings.connections.count} connections open"
@@ -24,10 +26,6 @@ get '/tail/:b64filepath', provides: 'text/event-stream' do
 
     if File.exists?(filepath)
       cmd = 'tail -f "'+filepath+'"'
-
-      puts cmd
-      out.write "data: #{cmd}\n\n"
-
       Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
         loop do
           if stdout.eof?

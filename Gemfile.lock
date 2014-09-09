@@ -4,6 +4,8 @@ GEM
     backports (3.6.0)
     daemons (1.1.9)
     eventmachine (1.0.3)
+    eventmachine-tail (0.6.4)
+      eventmachine
     haml (4.0.5)
       tilt
     multi_json (1.10.1)
@@ -11,6 +13,8 @@ GEM
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
+      rack (>= 1.0)
+    shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.4.5)
       rack (~> 1.4)
@@ -33,7 +37,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  eventmachine-tail
   haml
+  shotgun
   sinatra
   sinatra-contrib
   thin
