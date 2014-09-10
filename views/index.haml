@@ -29,14 +29,14 @@
       %table.stream-table
         %tr
           %td
-            .stream{data: {name: 'urls.txt', unique: 'true'}}
+            .stream{data: {name: 'urls.txt', title: 'Visited URLS', unique: 'true'}}
           %td
-            .stream{data: {name: 'forms.txt', match: 'mail|email|pass|pwd'}}
+            .stream{data: {name: 'forms.txt', title: 'Accounts', match: 'mail|email|pass|pwd'}}
         %tr
           %td
-            .stream
+            .stream{data: {name: 'socks_urls.txt', title: 'Visited URLS', unique: 'true'}}
           %td
-            .stream
+            .stream{data: {name: 'socks_forms.txt', title: 'Accounts', match: 'mail|email|pass|pwd|user'}}
 
     #config.tab-pane
       .container
@@ -61,7 +61,7 @@
           %td
             .stream{data: {name: 'exploit.log'}}
           %td
-            .stream
+            .stream{data: {name: 'socks.log'}}
         %tr
           %td
             .stream
