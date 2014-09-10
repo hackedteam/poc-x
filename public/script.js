@@ -2,11 +2,12 @@ $(function(){
   function attachEventSource(contentContainer) {
     var contentContainer = $(contentContainer);
     var filepath = contentContainer.data('path');
+    var unique = contentContainer.data('unique');
     var titleElem = $('<kbd class="title"></kbd>').insertBefore(contentContainer).text("untitled");
 
     if (filepath) {
       contentContainer.empty();
-      var eventSource = new EventSource('/tail/'+btoa(filepath));
+      var eventSource = new EventSource('/stream/'+filepath+"?unique="+unique);
       titleElem.text(contentContainer.data('title') || filepath);
       var preElem = $('<pre></pre>').appendTo(contentContainer);
 
