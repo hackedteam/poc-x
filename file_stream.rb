@@ -32,7 +32,7 @@ class FileStream
         @last_line = line
 
         if !match or (match and line =~ match)
-          stream << "data: #{line.strip}\n"
+          stream << "data: #{line.strip}\n\n"
         end
       end
     end
