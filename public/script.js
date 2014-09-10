@@ -1,14 +1,14 @@
 $(function(){
   function attachEventSource(contentContainer) {
     var contentContainer = $(contentContainer);
-    var filepath = contentContainer.data('path');
-    var unique = contentContainer.data('unique');
+    var params = contentContainer.data();
+
     var titleElem = $('<kbd class="title"></kbd>').insertBefore(contentContainer).text("untitled");
 
-    if (filepath) {
+    if (params['name']) {
       contentContainer.empty();
-      var eventSource = new EventSource('/stream/'+filepath+"?unique="+unique);
-      titleElem.text(contentContainer.data('title') || filepath);
+      var eventSource = new EventSource('/stream?'+$.param(params));
+      titleElem.text(params['title'] || params['name']);
       var preElem = $('<pre></pre>').appendTo(contentContainer);
 
       eventSource.onmessage = function(e) {

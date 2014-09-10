@@ -12,9 +12,9 @@ class App < Sinatra::Base
     haml :index
   end
 
-  get '/stream/:filename', provides: 'text/event-stream' do
+  get '/stream', provides: 'text/event-stream' do
     stream :keep_open do |out|
-      FileStream.new(params[:filename], unique: (params[:unique] == 'true')).stream(out)
+      FileStream.new(params[:name], params).stream(out)
     end
   end
 end

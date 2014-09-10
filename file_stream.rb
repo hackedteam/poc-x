@@ -3,10 +3,12 @@ require 'fileutils'
 class FileStream
   attr_accessor :path
   attr_accessor :unique
+  attr_accessor :match
 
-  def initialize(filename, unique: false)
+  def initialize(filename, options = {})
     self.path = File.join(self.class.base_path, filename)
-    self.unique = unique
+    self.unique = options[:unique]
+    self.match = Regexp.new(options[:match], true) if options[:match]
   end
 
   def create_if_missing
@@ -28,7 +30,10 @@ class FileStream
     EventMachine::file_tail(self.path, nil, -1) do |filetail, line|
       if !unique or (unique and @last_line != line)
         @last_line = line
-        stream << "data: #{line.strip}\n\n"
+
+        if !match or (match and line =~ match)
+          stream << "data: #{line.strip}\n\n"
+        end
       end
     end
   end

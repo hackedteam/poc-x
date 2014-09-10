@@ -29,9 +29,9 @@
       %table.stream-table
         %tr
           %td
-            .stream{data: {path: 'urls.txt', unique: 'true'}}
+            .stream{data: {name: 'urls.txt', unique: 'true'}}
           %td
-            .stream{data: {path: 'forms.txt'}}
+            .stream{data: {name: 'forms.txt', match: 'mail|email|pass|pwd'}}
         %tr
           %td
             .stream
@@ -59,7 +59,7 @@
       %table.stream-table
         %tr
           %td
-            .stream{data: {path: 'exploit.log'}}
+            .stream{data: {name: 'exploit.log'}}
           %td
             .stream
         %tr
