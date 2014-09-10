@@ -5,3 +5,4 @@ tmp
 temp
 data/*.txt
 data/*.log
+.idea
