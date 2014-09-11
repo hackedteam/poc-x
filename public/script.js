@@ -1,31 +1,58 @@
 $(function(){
-  function attachEventSource(contentContainer) {
-    var contentContainer = $(contentContainer);
-    var params = contentContainer.data();
+  function initTailWindows(){
+    $('.stream').each(function(){
+      var container = $(this);
+      var params = container.data();
 
-    var titleElem = $('<kbd class="title"></kbd>').insertBefore(contentContainer).text("untitled");
+      $('<kbd></kbd>')
+        .insertBefore(container)
+        .addClass('title')
+        .text(params['title'] || params['name'] || "untitled");
 
-    if (params['name']) {
-      contentContainer.empty();
-      var eventSource = new EventSource('/stream?'+$.param(params));
-      titleElem.text(params['title'] || params['name']);
-      var preElem = $('<pre></pre>').appendTo(contentContainer);
+      container.empty().append('<pre></pre>');
+    });
 
-      eventSource.onmessage = function(e) {
-        preElem.append(e.data + "\n");
-        scrollStream(contentContainer);
-      };
-    }
+    onTabChanged(function(tab){
+      tab.find('.stream').each(function(){
+        scrollTailWindow(this);
+      });
+    });
+
+    $(window).resize(resizeTailWindows);
   };
 
-  function resize() {
-    $('.stream').css('height', ($(window).innerHeight() / 2 - 60) + 'px');
-    $('.stream').css('width', ($(window).innerWidth() / 2 - 30) + 'px');
-  };
-
-  function scrollStream(container) {
+  function scrollTailWindow(container) {
     var container = $(container);
     container.scrollTop(container.find('pre').height());
+  };
+
+  function resizeTailWindows() {
+    $('.stream').each(function(){
+      var container = $(this);
+      var h = $(window).innerHeight() / 2 - 60;
+      var colspan = container.parent().attr('colspan');
+      var w = $(window).innerWidth() / (2 / (colspan || 1)) - 30;
+      container.css({height: h+'px', width: w+'px'});
+    });
+  };
+
+  function initTailSource() {
+    var params = [];
+
+    $('.stream').each(function(){
+      if ($(this).data('name')) {
+        params.push($(this).data());
+      }
+    });
+
+    var eventSource = new EventSource('/stream?files='+JSON.stringify(params));
+
+    eventSource.addEventListener('tail', function(e) {
+      var data = JSON.parse(e.data);
+      var container = $('.stream[data-name="'+data.filename+'"]');
+      container.find('pre').append(data.line+"\n");
+      scrollTailWindow(container);
+    }, false);
   };
 
   function onTabChanged(callback) {
@@ -35,19 +62,48 @@ $(function(){
     });
   };
 
-  // On Ready
+  function callService(name, action, container) {
+    $.ajax({
+      url: '/service/'+name+'/'+action,
+      success: function(data){
+        var data = JSON.parse(data);
+        var zeroStatus = data.status == 0
 
-  onTabChanged(function(tab){
-    tab.find('.stream').each(function(){
-      scrollStream(this);
+        if (action == 'stop' && zeroStatus)
+          zeroStatus = false;
+
+        container.removeClass('alert-warning');
+        container.removeClass('alert-danger');
+        container.removeClass('alert-info');
+        container.addClass('alert-'+(zeroStatus ? 'info' : 'danger'));
+        container.find('h4 > small').text(zeroStatus ? 'Active' : 'Stopped');
+      }
     });
-  });
+  };
 
-  $('.stream').each(function(){
-    attachEventSource(this);
-  });
+  function initServices() {
+    $('.service').each(function(){
+      var container = $(this);
+      var name = container.data('name');
 
-  $(window).resize(resize);
+      $(this).find('.btn-start').click(function(){
+        callService(name, 'start', container);
+      });
 
-  resize();
+      $(this).find('.btn-stop').click(function(){
+        callService(name, 'stop', container);
+      });
+
+      setInterval(function(){
+        callService(name, 'status', container);
+      }, 2000);
+    });
+  };
+
+  // main
+
+  initTailWindows();
+  initTailSource();
+  resizeTailWindows();
+  initServices();
 });

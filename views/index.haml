@@ -19,7 +19,7 @@
         Data flow
     %li
       %a{href: '#config', role: 'tab', data: {toggle: 'tab'}}
-        Configure
+        Configuration
     %li
       %a{href: '#logs', role: 'tab', data: {toggle: 'tab'}}
         Logs
@@ -43,17 +43,18 @@
         .row
           .col-md-12
             %h3
-              Configure
+              Configuration
 
-            .alert.alert-info
-              %h4
-                Service 1
-                %small
-                  Running
-              %button{type: 'button', class: 'btn btn-default'}
-                Start
-              %button{type: 'button', class: 'btn btn-default'}
-                Stop
+            - @services.each do |name|
+              .alert.alert-warning.service{data: {name: name}}
+                %h4
+                  = name
+                  %small
+                    Unknown status
+                %button{type: 'button', class: 'btn btn-default btn-start'}
+                  Start
+                %button{type: 'button', class: 'btn btn-default btn-stop'}
+                  Stop
 
     #logs.tab-pane
       %table.stream-table
@@ -63,7 +64,5 @@
           %td
             .stream{data: {name: 'socks.log'}}
         %tr
-          %td
-            .stream
-          %td
-            .stream
+          %td{colspan: 2}
+            .stream{data: {name: 'poc-x.log', title: "poc-x debug log"}}
