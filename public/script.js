@@ -9,6 +9,21 @@ $(function(){
         .addClass('title')
         .text(params['title'] || params['name'] || "untitled");
 
+      container.data('autoscroll', true);
+
+      container.scroll(function(e){
+        var offset = container.find('pre').height() - container.innerHeight();
+        var scrollTop = $(this).scrollTop();
+
+        if (scrollTop < offset) {
+          container.addClass('no-autoscroll');
+          container.data('autoscroll', false);
+        } else {
+          container.removeClass('no-autoscroll');
+          container.data('autoscroll', true);
+        }
+
+      });
       container.empty().append('<pre></pre>');
     });
 
@@ -51,7 +66,10 @@ $(function(){
       var data = JSON.parse(e.data);
       var container = $('.stream[data-name="'+data.filename+'"]');
       container.find('pre').append(data.line+"\n");
-      scrollTailWindow(container);
+
+      if (container.data('autoscroll'))
+        scrollTailWindow(container);
+
     }, false);
   };
 

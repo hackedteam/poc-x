@@ -23,3 +23,7 @@
 .stream .title {
   margin: 0.6em;
 }
+
+.stream.no-autoscroll {
+  border: 1px solid #868A08;
+}
