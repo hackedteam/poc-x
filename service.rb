@@ -1,63 +1,28 @@
-module Services; end
+module Service
+  extend self
 
-class Service
-  def self.list
-    Services.constants.map { |c| c.to_s.underscore }
+  def list
+    @list ||= Dir['scripts/*\_start.sh'].map { |path| path.scan(/scripts\/(.*)\_start/)[0][0] }.uniq
   end
 
-  def self.[](name)
-    Object.const_get("Services::#{name.camelize}").new
-  end
+  def exec(name, action, &block)
+    script_path = "scripts/#{name}_#{action}.sh"
+    raise "Missing script" unless File.exists?(script_path)
 
-  private
+    command = if script_path.end_with?(".sh")
+      "sh #{script_path}"
+    elsif script_path.end_with?(".rb")
+      "ruby #{script_path}"
+    else
+      "./#{script_path}"
+    end
+
+    em_system(command, &block)
+  end
 
   def em_system(cmd, &block)
     EM.system(cmd) do |output, status|
       block.call(output, status.exitstatus)
-    end
-  end
-end
-
-module Services
-  class VirtualInterface < Service
-    def start(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def stop(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def status(&block)
-      em_system('ifconfig en0', &block)
-    end
-  end
-
-  class IpTables < Service
-    def start(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def stop(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def status(&block)
-      em_system('ifconfig en7', &block)
-    end
-  end
-
-  class MitmProxy < Service
-    def start(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def stop(&block)
-      em_system('ifconfig', &block)
-    end
-
-    def status(&block)
-      em_system('ifconfig en7', &block)
     end
   end
 end

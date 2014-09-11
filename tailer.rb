@@ -29,9 +29,9 @@ class Tailer
     @file_tail.close unless @file_tail.closed?
   end
 
-  def self.delete_all
+  def self.truncate_all
     glob = File.join(base_path, "*")
-    Dir[glob].each { |path| FileUtils.rm_f(path) }
+    Dir[glob].each { |path| File.open(path, 'wb') {} }
   end
 
   def self.base_path

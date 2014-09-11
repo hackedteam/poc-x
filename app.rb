@@ -5,6 +5,7 @@ require 'sinatra/streaming'
 require 'thin'
 require 'haml'
 require 'json'
+require 'logger'
 
 require_relative 'tailer'
 require_relative 'service'
@@ -13,8 +14,8 @@ set server: 'thin', connections: []
 
 configure do
   set :threaded, false
-  Thin::Logging.debug = true
-  Tailer.delete_all
+  Tailer.truncate_all
+  $logger = Logger.new(__dir__+"/data/poc-x.log")
 end
 
 get '/' do
@@ -28,7 +29,12 @@ get '/service/:name/:action' do
 
     raise "Forbidden" unless %w[start stop status].include?(action)
 
-    Service[params[:name]].send(action) do |output, status|
+    out.callback { out.close }
+
+    $logger.info "Request #{action} for service #{params[:name]}"
+
+    Service.exec(params[:name], action) do |output, status|
+      return if out.closed?
       out << {output: output, status: status}.to_json
       out.close
     end
@@ -55,4 +61,3 @@ get '/stream', provides: 'text/event-stream' do
     end
   end
 end
-
