@@ -1,3 +1,3 @@
 #!/bin/bash
 #title: MITM Proxy
-mitmproxy -T --host -s inject.py
+mitmdump -T --host -s inject.py

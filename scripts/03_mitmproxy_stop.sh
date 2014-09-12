@@ -1,2 +1,2 @@
 #!/bin/bash
-killall -9 mitmproxy
+killall -9 mitmdump
