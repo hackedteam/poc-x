@@ -43,19 +43,19 @@
         .row
           .col-md-12
             %h3
-            - @services.each do |name, title|
+            - @services.keys.sort.each do |name|
               .service.alert-warning{data: {name: name}}
                 .row
                   .col-xs-8
                     %h5
-                      = title
+                      = @services[name]
                       %small
                         Unknown status
                   .col-md-4
                     .btn-group.pull-right
-                      %button{type: 'button', class: 'btn btn-default btn-stop'}
+                      %button{type: 'button', disabled: 'disabled', class: 'btn btn-default btn-stop'}
                         Stop
-                      %button{type: 'button', class: 'btn btn-default btn-start'}
+                      %button{type: 'button', disabled: 'disabled', class: 'btn btn-default btn-start'}
                         Start
 
     #logs.tab-pane
