@@ -1,2 +1,2 @@
 #!/bin/bash
-iptables -nv -t nat -L | grep MASQUERADE
+iptables -nvw -t nat -L | grep MASQUERADE

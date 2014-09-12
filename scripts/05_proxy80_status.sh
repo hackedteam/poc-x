@@ -1,2 +1,2 @@
 #!/bin/bash
-iptables -t nat -n -L PREROUTING | grep "80 redir"
+iptables -t nat -nw -L PREROUTING | grep "80 redir"
