@@ -31,7 +31,7 @@ get '/service/:name/:action' do
 
     out.callback { out.close }
 
-    $logger.info "Request #{action} for service #{params[:name]}"
+    $logger.info "Request #{action} for service #{params[:name]}" unless action.eql? 'status'
 
     Service.exec(params[:name], action) do |output, status|
       unless out.closed?
