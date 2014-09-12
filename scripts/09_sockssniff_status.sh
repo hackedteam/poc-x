@@ -1,2 +1,2 @@
 #!/bin/bash
-ps a | grep ngrep
+pidof ngrep
