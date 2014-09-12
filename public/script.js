@@ -118,7 +118,7 @@ $(function(){
 
       setInterval(function(){
         callService(name, 'status', container);
-      }, 1500);
+      }, 3000);
     });
   };
 
