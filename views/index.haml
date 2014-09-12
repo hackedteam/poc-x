@@ -43,13 +43,11 @@
         .row
           .col-md-12
             %h3
-              Configuration
-
             - @services.each do |name, title|
-              .alert.alert-warning.service{data: {name: name}}
+              .service.alert-warning{data: {name: name}}
                 .row
                   .col-xs-8
-                    %h4
+                    %h5
                       = title
                       %small
                         Unknown status

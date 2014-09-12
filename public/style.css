@@ -27,3 +27,9 @@
 .stream.no-autoscroll {
   border: 1px solid #868A08;
 }
+
+.service {
+  padding: 0.2em 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 0.5em;
+}
