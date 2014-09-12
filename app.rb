@@ -34,9 +34,10 @@ get '/service/:name/:action' do
     $logger.info "Request #{action} for service #{params[:name]}"
 
     Service.exec(params[:name], action) do |output, status|
-      return if out.closed?
-      out << {output: output, status: status}.to_json
-      out.close
+      unless out.closed?
+        out << {output: output, status: status}.to_json
+        out.close
+      end
     end
   end
 end

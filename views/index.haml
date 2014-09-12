@@ -47,14 +47,18 @@
 
             - @services.each do |name, title|
               .alert.alert-warning.service{data: {name: name}}
-                %h4
-                  = title
-                  %small
-                    Unknown status
-                %button{type: 'button', class: 'btn btn-default btn-start'}
-                  Start
-                %button{type: 'button', class: 'btn btn-default btn-stop'}
-                  Stop
+                .row
+                  .col-xs-8
+                    %h4
+                      = title
+                      %small
+                        Unknown status
+                  .col-md-4
+                    .btn-group.pull-right
+                      %button{type: 'button', class: 'btn btn-default btn-stop'}
+                        Stop
+                      %button{type: 'button', class: 'btn btn-default btn-start'}
+                        Start
 
     #logs.tab-pane
       %table.stream-table
