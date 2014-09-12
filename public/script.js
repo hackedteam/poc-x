@@ -83,6 +83,10 @@ $(function(){
   function callService(name, action, container) {
     $.ajax({
       url: '/service/'+name+'/'+action,
+      beforeSend: function() {
+        if (action == 'status') return;
+        container.find('.btn').attr('disabled', true);
+      },
       success: function(data){
         if (action != 'status') return;
 
@@ -92,13 +96,16 @@ $(function(){
         container.removeClass('alert-danger');
         container.removeClass('alert-info');
         container.addClass('alert-'+(data.status == 0 ? 'info' : 'danger'));
-        container.find('h4 > small').text(data.status == 0 ? 'Active' : 'Stopped');
+        container.find('small').text(data.status == 0 ? 'Active' : 'Stopped');
+        container.find('.btn-stop').attr('disabled', !data.status == 0);
+        container.find('.btn-start').attr('disabled', data.status == 0);
       },
       error: function(jqXHR, textStatus, errorThrown) {
         container.addClass('alert-warning');
         container.removeClass('alert-danger');
         container.removeClass('alert-info');
-        container.find('h4 > small').text('Unknown status');
+        container.find('.btn').attr('disabled', true);
+        container.find('small').text('Unknown status');
       }
     });
   };
