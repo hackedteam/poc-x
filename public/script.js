@@ -84,17 +84,21 @@ $(function(){
     $.ajax({
       url: '/service/'+name+'/'+action,
       success: function(data){
-        var data = JSON.parse(data);
-        var zeroStatus = data.status == 0
+        if (action != 'status') return;
 
-        if (action == 'stop' && zeroStatus)
-          zeroStatus = false;
+        var data = JSON.parse(data);
 
         container.removeClass('alert-warning');
         container.removeClass('alert-danger');
         container.removeClass('alert-info');
-        container.addClass('alert-'+(zeroStatus ? 'info' : 'danger'));
-        container.find('h4 > small').text(zeroStatus ? 'Active' : 'Stopped');
+        container.addClass('alert-'+(data.status == 0 ? 'info' : 'danger'));
+        container.find('h4 > small').text(data.status == 0 ? 'Active' : 'Stopped');
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        container.addClass('alert-warning');
+        container.removeClass('alert-danger');
+        container.removeClass('alert-info');
+        container.find('h4 > small').text('Unknown status');
       }
     });
   };
@@ -114,7 +118,7 @@ $(function(){
 
       setInterval(function(){
         callService(name, 'status', container);
-      }, 2000);
+      }, 1500);
     });
   };
 

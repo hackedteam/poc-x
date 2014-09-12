@@ -45,10 +45,10 @@
             %h3
               Configuration
 
-            - @services.each do |name|
+            - @services.each do |name, title|
               .alert.alert-warning.service{data: {name: name}}
                 %h4
-                  = name
+                  = title
                   %small
                     Unknown status
                 %button{type: 'button', class: 'btn btn-default btn-start'}
