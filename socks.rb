@@ -4,7 +4,7 @@ require 'socket'
 require 'thread'
 
 def log(text)
-  File.open('data/socks.log', 'a') {|f| f.write text}
+  File.open('data/socks.log', 'a') {|f| f.write text + "\n"}
   puts text
 end
 
