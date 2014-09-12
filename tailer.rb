@@ -35,7 +35,7 @@ class Tailer
   end
 
   def self.base_path
-    File.join(__dir__, 'data')
+    File.join(File.dirname(File.realpath(__FILE__)), 'data')
   end
 
   private

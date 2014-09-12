@@ -15,7 +15,7 @@ set server: 'thin', connections: []
 configure do
   set :threaded, false
   Tailer.truncate_all
-  $logger = Logger.new(__dir__+"/data/poc-x.log")
+  $logger = Logger.new(File.dirname(File.realpath(__FILE__))+"/data/poc-x.log")
 end
 
 get '/' do
