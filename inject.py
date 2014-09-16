@@ -9,12 +9,13 @@ def request(ctx, flow):
     ctx.log("request")
     #print "REQUEST:"
     #print flow.request._assemble()
+    #print str(flow.request.headers["Host"][0])
     try:
         file = open("data/urls.txt", "a")
         if flow.request.port == 443:
-            file.write("HTTPS " + flow.request.host + "\n")
+            file.write("HTTPS " + str(flow.request.headers["Host"][0]) + "\n")
         else:
-            file.write("http  " + flow.request.host + "\n")
+            file.write("http  " + str(flow.request.headers["Host"][0]) + "\n")
         file.close()
 
         #if 'Accept-Encoding' in flow.request.headers:
