@@ -62,6 +62,8 @@ $(function(){
 
     var eventSource = new EventSource('/stream?files='+JSON.stringify(params));
 
+    eventSource.addEventListener('keep-alive', function(e){}, false);
+
     eventSource.addEventListener('tail', function(e) {
       var data = JSON.parse(e.data);
       var container = $('.stream[data-name="'+data.filename+'"]');

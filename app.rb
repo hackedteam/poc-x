@@ -44,7 +44,10 @@ end
 
 get '/stream', provides: 'text/event-stream' do
   stream :keep_open do |out|
-    timer = EventMachine::PeriodicTimer.new(20) { out << "keep" }
+    timer = EventMachine::PeriodicTimer.new(20) do
+      out << "event: keep-alive\ndata: \n\n" unless out.closed?
+    end
+
     tailers = []
 
     out.callback do
