@@ -1,2 +1,2 @@
 #!/bin/bash
-ps aux | grep ruby | grep socks.rb
+netstat -an | grep LISTEN | grep 9166
