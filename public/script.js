@@ -44,9 +44,9 @@ $(function(){
   function resizeTailWindows() {
     $('.stream').each(function(){
       var container = $(this);
-      var h = $(window).innerHeight() / 2 - 60;
+      var h = $(window).innerHeight() / 2 - 65;
       var colspan = container.parent().attr('colspan');
-      var w = $(window).innerWidth() / (2 / (colspan || 1)) - 30;
+      var w = $(window).innerWidth() / (2 / (colspan || 1)) - 20;
       container.css({height: h+'px', width: w+'px'});
     });
   };

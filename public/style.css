@@ -1,7 +1,10 @@
+.tab-content {
+  padding: 1em;
+}
+
 .stream-table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1em;
 }
 
 .stream-table td {
@@ -18,6 +21,11 @@
 
 .stream pre {
   border: none;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 .stream .title {
