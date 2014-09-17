@@ -34,7 +34,7 @@
             .stream{data: {name: 'forms.txt', title: 'Accounts', match: 'email|pass|pwd', format_params: true}}
         %tr
           %td
-            .stream{data: {name: 'socks_urls.txt', title: 'Visited URLS through SOCKS', unique: 'true'}}
+            .stream{data: {name: 'socks_urls.txt', title: 'Visited URLS through SOCKS', unique: 'true', match: 'Host:'}}
           %td
             .stream{data: {name: 'socks_forms.txt', title: 'Accounts through SOCKS', match: 'password|pass|pwd|username', format_params: true}}
 
