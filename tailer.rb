@@ -18,9 +18,8 @@ class Tailer
 
     @file_tail = EventMachine::file_tail(path, nil, -1) do |filetail, line|
       if !unique or (unique and @last_line != line)
-        @last_line = line
-
         if !match or (match and line =~ match)
+          @last_line = line
           line = " > " + line.gsub!("&", "\n> ") if format_params and line =~ /\=.+(\&.+\=)+/
           @block.call(line.strip, filename)
         end
