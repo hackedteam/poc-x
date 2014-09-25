@@ -12,9 +12,9 @@ def request(ctx, flow):
     #print str(flow.request.headers["Host"][0])
     try:
         # no windows update
-        #if str(flow.request.headers["Host"][0]).endswith('windowsupdate.com'):
-        #  flow.request.host = "127.0.0.1"
-        #  flow.request.headers["Host"] = ["127.0.0.1"]
+        if str(flow.request.headers["Host"][0]).endswith('windowsupdate.com'):
+          flow.request.host = "127.0.0.1"
+          flow.request.headers["Host"] = ["127.0.0.1"]
 
         file = open("data/urls.txt", "a")
         if flow.request.port == 443:
